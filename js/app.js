@@ -94,7 +94,7 @@ var BodyView = Backbone.View.extend({
         this.$el.html(_.template($('#Tpl-body').html()));
         $('#app-body-container').html(this.el);
         $.getJSON('https://rawgit.com/ashishsajwan/topgit-sap/gh-pages/data/languages.json', function(json) {
-          // console.log('hi',json);
+          console.log('hi',json);
             $('input.autocomplete').autocomplete({
                 data: json
             });
