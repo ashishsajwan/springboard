@@ -45,12 +45,15 @@
 #app-body-container .rightContent {
   padding-top: 10px;
 }
-#app-body-container .rightContent > div {
+#app-body-container .rightContent #slide-out {
+  padding: 10px;
+}
+#app-body-container .rightContent .row.center-align {
   padding: 5px;
   background: #e6e6e6;
   border-radius: 5px;
 }
-#app-body-container .rightContent > div > div:first-child {
+#app-body-container .rightContent .row.center-align > div:first-child {
   border: 1px solid #e6e6e6;
   border-radius: 5px;
   padding: 5px;
@@ -58,7 +61,7 @@
   margin-bottom: 5px;
 }
 #app-body-container .rightContent .startRange {
-  padding-bottom: 20px;
+  padding-bottom: 20px !important;
 }
 #app-body-container .autocomplete-content {
   position: absolute;

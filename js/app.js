@@ -116,27 +116,37 @@ var BodyView = Backbone.View.extend({
         this.renderFilter();
     },
     renderFilter: function() {
-        $('#app-body-container .rightContent').html(_.template($('#Tpl-filter').html())(this.queryData.toJSON()));
+        $('.drag-target,#sidenav-overlay').remove();
+        $('#app-body-container .rightContent.hide-on-med-and-up').html(_.template($('#Tpl-filterMobile').html())(this.queryData.toJSON()));
+        $('#app-body-container .rightContent.hide-on-small-only').html(_.template($('#Tpl-filter').html())(this.queryData.toJSON()));
+        $('.button-collapse').sideNav({
+            menuWidth: 300,
+            edge: 'right',
+            closeOnClick: true
+        });
         this.activateSlider();
     },
     activateSlider: function() {
         var that = this;
-        var slider = document.getElementById('slider');
-        noUiSlider.create(slider, {
-            start: [that.queryData.get('stars').min, that.queryData.get('stars').max],
-            connect: true,
-            step: 1,
-            range: {
-                'min': 0,
-                'max': 1000
-            },
-            format: wNumb({
-                decimals: 0
-            })
+        var sliders = $('.starSlider');
+        _.each(sliders, function(slider) {
+            noUiSlider.create(slider, {
+                start: [that.queryData.get('stars').min, that.queryData.get('stars').max],
+                connect: true,
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': 1000
+                },
+                format: wNumb({
+                    decimals: 0
+                })
+            });
+            slider.noUiSlider.on('set', function(e) {
+                that.updateSearchData(e);
+            });
         });
-        slider.noUiSlider.on('set', function(e) {
-            that.updateSearchData(e);
-        });
+
     },
     activateAutocomplete: function() {
         $.getJSON('https://rawgit.com/ashishsajwan/topgit-sap/gh-pages/data/languages.json', function(json) {
