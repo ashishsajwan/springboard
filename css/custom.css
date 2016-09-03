@@ -72,6 +72,9 @@
 #repo-list-container {
   margin-top: -20px;
 }
+#repo-list-container #repo-list {
+  overflow: auto;
+}
 #repo-list-container .card-panel {
   cursor: pointer;
 }
