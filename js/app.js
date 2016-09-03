@@ -51,6 +51,7 @@ var HeaderView = Backbone.View.extend({
 var BodyView = Backbone.View.extend({
     events: {
         'change input.autocomplete': 'updateSearchData',
+        'click .card-panel': 'goToRepo',
     },
     initialize: function(data) {
         /**
@@ -167,6 +168,9 @@ var BodyView = Backbone.View.extend({
         }
         $('#repo-list-container #loader').hide();
         $('#repo-list').html(listHtml);
+    },
+    goToRepo: function(e) {
+        window.open($(e.currentTarget).attr('data-link'));
     }
 })
 

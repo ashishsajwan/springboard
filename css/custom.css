@@ -69,9 +69,13 @@
 #repo-list-container {
   margin-top: -20px;
 }
+#repo-list-container .card-panel {
+  cursor: pointer;
+}
 #repo-list-container .repoName {
   color: #6FB4B1;
   font-size: 1.5em;
+  margin-left: 5px;
 }
 #repo-list-container .fa-github {
   font-size: 2em;
@@ -79,6 +83,7 @@
 #repo-list-container .repoDetail {
   color: #666666;
   font-size: 1em;
+  margin-left: 5px;
 }
 @media only screen and (max-width: 600px) {
   #app-body-container .leftContent {
