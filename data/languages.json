@@ -36,7 +36,7 @@
     "AMOS": "",
     "AMPL": "",
     "APL": "",
-    "App Inventor for Android\"s visual block language": "",
+    "App Inventor for Androids visual block language": "",
     "AppleScript": "",
     "Arc": "",
     "ARexx": "",
@@ -674,7 +674,8 @@
     "Visual Prolog": "",
     "VSXu": "",
     "Vvvv": "",
-    "WATFIV:"", WATFOR": "",
+    "WATFIV": "",
+    "WATFOR": "",
     "WebDNA": "",
     "WebQL": "",
     "Windows PowerShell": "",
@@ -703,5 +704,5 @@
     "Z notation": "",
     "Zeno": "",
     "ZOPL": "",
-    "ZPL" :""
+    "ZPL": ""
 }
