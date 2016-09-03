@@ -1,3 +1,7 @@
+/**
+ * This is a backbone model which store
+ * the data for a Query/API Entity
+ */
 var QueryDataModel = Backbone.Model.extend({
     defaults: {
         'stars': {
@@ -20,7 +24,7 @@ var RepoModel = Backbone.Model.extend({
 
 /**
  * This is a backbone collection which store
- * the list of books as collection
+ * the list of Repos as collection
  */
 var RepoList = Backbone.Collection.extend({
     model: RepoModel,
@@ -37,6 +41,7 @@ var RepoList = Backbone.Collection.extend({
  */
 var HeaderView = Backbone.View.extend({
     initialize: function() {
+        // listen to update event on model
         this.listenTo(this.model, 'update', this.render);
         this.render();
     },
@@ -45,9 +50,11 @@ var HeaderView = Backbone.View.extend({
         this.$el.html(headerTemplate(this.model.toJSON()));
         $('#app-header-container').html(this.el);
     }
-
 });
-
+/**
+ * This is a backbone view which is responsible
+ * for rendering Repo list and filter options
+ */
 var BodyView = Backbone.View.extend({
     events: {
         'change input.autocomplete': 'updateSearchData',
@@ -70,6 +77,9 @@ var BodyView = Backbone.View.extend({
         this.listenTo(this.queryData, 'update', this.renderFilter);
         this.fetchRepos();
     },
+    /** update queryData model with new search term
+     *   or new star filter range
+     **/
     updateSearchData: function(e) {
         var that = this;
         if (e.currentTarget) {
@@ -87,6 +97,10 @@ var BodyView = Backbone.View.extend({
             });
         }
     },
+
+    /** fetch the new set of repos based on new
+     *   filter/search data (queryData)
+     */
     fetchRepos: function() {
         var that = this;
         $('#repo-list-container #loader').show();
@@ -98,6 +112,13 @@ var BodyView = Backbone.View.extend({
                 order: 'desc'
             },
             success: function(collection, response, options) {
+                // when we get response back we need to update
+                // X-RateLimit values
+
+                // siliently update this data
+                // we dont want to backbone to trigger change event for this.
+                // because change event is used for changes done by user
+                // using search autocomplete or start range
                 that.queryData.set({
                     'XRateRemaining': options.xhr.getResponseHeader('X-RateLimit-Remaining'),
                     'XRateLimit': options.xhr.getResponseHeader('X-RateLimit-Limit'),
@@ -106,6 +127,7 @@ var BodyView = Backbone.View.extend({
                 }, {
                     silent: true
                 });
+                // instead , we are emmiting update event here
                 that.queryData.trigger('update');
             }
         });
@@ -116,6 +138,12 @@ var BodyView = Backbone.View.extend({
         this.activateAutocomplete();
         this.renderFilter();
     },
+    /**
+     * filter is the side filter which has start range widget
+     * actually side filter has rendered twice
+     * # one for mobile view (which comes when user Swipes right)
+     * # other side filter is for devices tablets and above
+     */
     renderFilter: function() {
         $('.drag-target,#sidenav-overlay').remove();
         $('#app-body-container .rightContent.hide-on-med-and-up').html(_.template($('#Tpl-filterMobile').html())(this.queryData.toJSON()));
@@ -127,6 +155,7 @@ var BodyView = Backbone.View.extend({
         });
         this.activateSlider();
     },
+    // side filter has a slider (star Range) which we have to activate
     activateSlider: function() {
         var that = this;
         var sliders = $('.starSlider');
@@ -149,6 +178,7 @@ var BodyView = Backbone.View.extend({
         });
 
     },
+    // also activate the autocomplete search widget
     activateAutocomplete: function() {
         $.getJSON('https://rawgit.com/ashishsajwan/topgit-sap/gh-pages/data/languages.json', function(json) {
             $('input.autocomplete').autocomplete({
@@ -156,6 +186,7 @@ var BodyView = Backbone.View.extend({
             });
         });
     },
+    // render Repo List
     renderReposList: function() {
         var listHtml = '';
         var repoTemplate = _.template($('#Tpl-repo').html());
@@ -169,6 +200,7 @@ var BodyView = Backbone.View.extend({
         $('#repo-list-container #loader').hide();
         $('#repo-list').html(listHtml);
     },
+    // when clicked on repo it takes user to repo page in new tab
     goToRepo: function(e) {
         window.open($(e.currentTarget).attr('data-link'));
     }
