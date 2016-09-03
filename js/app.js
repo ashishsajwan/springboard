@@ -98,8 +98,8 @@ var BodyView = Backbone.View.extend({
         this.setHeaderStats();
         var listHtml = '';
         var repoTemplate = _.template($('#Tpl-repo').html());
-        _.each(this.collection.models,function(model,key){
-          listHtml+= repoTemplate(model.toJSON());
+        _.each(this.collection.models, function(model, key) {
+            listHtml += repoTemplate(model.toJSON());
         });
         $('#repo-list-container').html(listHtml);
     },

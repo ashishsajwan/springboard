@@ -38,7 +38,24 @@
   border-radius: 4px;
   padding: 5px 10px;
 }
+#app-body-container .leftContent {
+  border-right: 2px solid #E6E6E6;
+  padding-top: 10px;
+}
+#repo-list-container {
+  margin-top: -20px;
+}
 #repo-list-container .repoName {
   color: #6FB4B1;
   font-size: 1.5em;
+}
+#repo-list-container .fa-github {
+  font-size: 2em;
+}
+#repo-list-container .repoDetail {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #666666;
+  font-size: 1em;
 }
