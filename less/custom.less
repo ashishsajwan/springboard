@@ -44,8 +44,31 @@
         border-right: 2px solid #E6E6E6;
         padding-top: 10px;
     }
+
+    .rightContent {
+        padding-top: 10px;
+
+        > div {
+            padding: 5px;
+            background: #e6e6e6;
+            border-radius: 5px;
+
+            > div:first-child {
+                border: 1px solid #e6e6e6;
+                border-radius: 5px;
+                padding: 5px;
+                background: white;
+                margin-bottom: 5px;
+            }
+        }
+
+        .startRange {
+            padding-bottom: 20px;
+        }
+    }
+
     .autocomplete-content {
-      position: absolute;
+        position: absolute;
     }
 }
 

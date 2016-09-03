@@ -68,7 +68,7 @@ var HeaderView = Backbone.View.extend({
 
 var BodyView = Backbone.View.extend({
     events: {
-        'change input.autocomplete': 'updateSearchData'
+        'change input.autocomplete': 'updateSearchData',
     },
     initialize: function(data) {
         this.renderBody();
@@ -87,9 +87,18 @@ var BodyView = Backbone.View.extend({
         this.fetchRepos();
     },
     updateSearchData: function(e) {
-        this.queryData.set({
-            language: $(e.currentTarget).val()
-        });
+        if (e.currentTarget) {
+            this.queryData.set({
+                language: $(e.currentTarget).val()
+            });
+        } else {
+            this.queryData.set({
+                stars: {
+                    min: e['0'],
+                    max: e['1']
+                }
+            });
+        }
     },
     fetchRepos: function() {
         this.collection.fetch({
@@ -104,6 +113,26 @@ var BodyView = Backbone.View.extend({
         this.$el.html(_.template($('#Tpl-body').html()));
         $('#app-body-container').html(this.el);
         this.activateAutocomplete();
+        this.activateSlider();
+    },
+    activateSlider: function() {
+        var that = this;
+        var slider = document.getElementById('slider');
+        noUiSlider.create(slider, {
+            start: [0, 1000],
+            connect: true,
+            step: 1,
+            range: {
+                'min': 0,
+                'max': 1000
+            },
+            format: wNumb({
+                decimals: 0
+            })
+        });
+        slider.noUiSlider.on('set', function(e) {
+            that.updateSearchData(e);
+        });
     },
     activateAutocomplete: function() {
         $.getJSON('https://rawgit.com/ashishsajwan/topgit-sap/gh-pages/data/languages.json', function(json) {
