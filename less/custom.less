@@ -3,12 +3,9 @@
 #app-header-container {
     padding: 10px;
     border-bottom: 2px solid #E6E6E6;
-
-    .row {
+    //fix for mobile device
+    .row.hide-on-med-and-up {
         margin: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 }
 
@@ -29,6 +26,10 @@
     .small {
         color: #B1CD5D;
         font-size: 0.8em;
+    }
+    // mobile device
+    &.s12 {
+        margin-bottom: 10px;
     }
 }
 
@@ -89,3 +90,5 @@
         font-size: 1em;
     }
 }
+
+@import "mediaQuery.less";

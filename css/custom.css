@@ -12,11 +12,8 @@
   padding: 10px;
   border-bottom: 2px solid #E6E6E6;
 }
-#app-header-container .row {
+#app-header-container .row.hide-on-med-and-up {
   margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 #logo-container img {
   vertical-align: middle;
@@ -31,6 +28,9 @@
 #logo-container .small {
   color: #B1CD5D;
   font-size: 0.8em;
+}
+#logo-container.s12 {
+  margin-bottom: 10px;
 }
 #result-gist-container {
   border: 2px solid #567D33;
@@ -76,4 +76,9 @@
 #repo-list-container .repoDetail {
   color: #666666;
   font-size: 1em;
+}
+@media only screen and (max-width: 600px) {
+  #app-body-container .leftContent {
+    border: none;
+  }
 }
