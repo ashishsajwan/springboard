@@ -1,21 +1,13 @@
-/**
- * This is a backbone model which store
- * the data for header View
- */
-var HeaderStatsModel = Backbone.Model.extend({
-    defaults: {
-        "totalRepos": '-',
-        "language": '-'
-    }
-});
-
 var QueryDataModel = Backbone.Model.extend({
     defaults: {
-        stars: {
-            min: 0,
-            max: 1000,
+        'stars': {
+            'min': 0,
+            'max': 1000,
         },
-        language: 'assembly'
+        'language': 'assembly',
+        'totalRepos': '-',
+        'XRateRemaining': '-',
+        'XRateLimit': '-',
     }
 });
 /**
@@ -36,16 +28,6 @@ var RepoList = Backbone.Collection.extend({
         _.extend(this, _.pick(data, ['total_count', 'incomplete_results']));
         return data.items;
     },
-    comparator: function(a, b) {
-        a = this.sanitizeNumber(a.get(this.sort_key));
-        b = this.sanitizeNumber(b.get(this.sort_key));
-        return a < b ? 1 : a > b ? -1 : 0;
-    },
-    sanitizeNumber: function(string) {
-        if (string) {
-            return Number(string.replace(/[^0-9\.]+/g, ""))
-        }
-    },
     url: 'https://api.github.com/search/repositories'
 });
 
@@ -55,7 +37,7 @@ var RepoList = Backbone.Collection.extend({
  */
 var HeaderView = Backbone.View.extend({
     initialize: function() {
-        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'update', this.render);
         this.render();
     },
     render: function() {
@@ -71,26 +53,30 @@ var BodyView = Backbone.View.extend({
         'change input.autocomplete': 'updateSearchData',
     },
     initialize: function(data) {
-        this.renderBody();
         /**
          extend view with data so that custom data which was passed while
          initializing view can also get attached to view
         **/
         _.extend(this, data);
 
+        this.renderBody();
         /*
           When ever data inside collection is fetched from server 'sync' event
           will be triggered & then we can render the Repos as list inside this view
         */
         this.listenTo(this.collection, 'sync', this.renderReposList);
         this.listenTo(this.queryData, 'change', this.fetchRepos);
+        this.listenTo(this.queryData, 'update', this.renderFilter);
         this.fetchRepos();
     },
     updateSearchData: function(e) {
+        var that = this;
         if (e.currentTarget) {
-            this.queryData.set({
-                language: $(e.currentTarget).val()
-            });
+            _.delay(function() {
+                that.queryData.set({
+                    language: $(e.currentTarget).val()
+                });
+            }, 500);
         } else {
             this.queryData.set({
                 stars: {
@@ -101,11 +87,25 @@ var BodyView = Backbone.View.extend({
         }
     },
     fetchRepos: function() {
+        var that = this;
+        $('#repo-list-container #loader').show();
+        $('#repo-list-container #repo-list').html('');
         this.collection.fetch({
             data: {
                 q: 'stars:' + this.queryData.get('stars').min + '..' + this.queryData.get('stars').max + ' language:' + this.queryData.get('language'),
                 sort: 'stars',
                 order: 'desc'
+            },
+            success: function(collection, response, options) {
+                that.queryData.set({
+                    'XRateRemaining': options.xhr.getResponseHeader('X-RateLimit-Remaining'),
+                    'XRateLimit': options.xhr.getResponseHeader('X-RateLimit-Limit'),
+                    'totalRepos': response.total_count,
+                    'language': that.queryData.get('language')
+                }, {
+                    silent: true
+                });
+                that.queryData.trigger('update');
             }
         });
     },
@@ -113,13 +113,17 @@ var BodyView = Backbone.View.extend({
         this.$el.html(_.template($('#Tpl-body').html()));
         $('#app-body-container').html(this.el);
         this.activateAutocomplete();
+        this.renderFilter();
+    },
+    renderFilter: function() {
+        $('#app-body-container .rightContent').html(_.template($('#Tpl-filter').html())(this.queryData.toJSON()));
         this.activateSlider();
     },
     activateSlider: function() {
         var that = this;
         var slider = document.getElementById('slider');
         noUiSlider.create(slider, {
-            start: [0, 1000],
+            start: [that.queryData.get('stars').min, that.queryData.get('stars').max],
             connect: true,
             step: 1,
             range: {
@@ -142,36 +146,30 @@ var BodyView = Backbone.View.extend({
         });
     },
     renderReposList: function() {
-        this.setHeaderStats();
         var listHtml = '';
         var repoTemplate = _.template($('#Tpl-repo').html());
-        _.each(this.collection.models, function(model, key) {
-            listHtml += repoTemplate(model.toJSON());
-        });
-        $('#repo-list-container').html(listHtml);
-    },
-    setHeaderStats: function() {
-        this.headerStats.set({
-            totalRepos: this.collection.total_count,
-            language: this.queryData.get('language')
-        });
+        if (this.collection.total_count) {
+            _.each(this.collection.models, function(model, key) {
+                listHtml += repoTemplate(model.toJSON());
+            });
+        } else {
+            listHtml += '<div class="center-align">Oops.. couldn\'t find any such repositories</div>';
+        }
+        $('#repo-list-container #loader').hide();
+        $('#repo-list').html(listHtml);
     }
 })
 
 $(document).ready(function() {
-    // create a object of headerstatsModel
-    var headerStatsModel = new HeaderStatsModel();
     var queryDataModel = new QueryDataModel();
 
     // create a object of Headerview
     // which will render header view of app
     var headerView = new HeaderView({
-        model: headerStatsModel
+        model: queryDataModel
     });
 
     var bodyView = new BodyView({
-        // also passing custom data
-        headerStats: headerStatsModel,
         queryData: queryDataModel,
         // along with normal collection
         collection: new RepoList()
