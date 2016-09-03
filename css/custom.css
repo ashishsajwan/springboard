@@ -1,0 +1,40 @@
+.centroid:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.centroid .child {
+  display: inline-block;
+  vertical-align: middle;
+}
+#app-header-container {
+  padding: 10px;
+  border-bottom: 2px solid #E6E6E6;
+}
+#app-header-container .row {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#logo-container img {
+  vertical-align: middle;
+}
+#logo-container span {
+  vertical-align: middle;
+}
+#logo-container .big {
+  color: #2E984F;
+  font-size: 1.7em;
+}
+#logo-container .small {
+  color: #B1CD5D;
+  font-size: 0.8em;
+}
+#result-gist-container {
+  border: 2px solid #567D33;
+  background: #E0EDD5;
+  border-radius: 4px;
+  padding: 5px 10px;
+}

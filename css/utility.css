@@ -1,0 +1,10 @@
+.centroid:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.centroid .child {
+  display: inline-block;
+  vertical-align: middle;
+}

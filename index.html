@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        TopGit - Finding the best github projects!
+    </title>
+    <!-- So that Mobile Browsers Render this page as mobile friendly -->
+    <meta content="width=device-width, height=device-height,initial-scale=1.0, user-scalable=no,user-scalable=0" name="viewport" />
+    <!-- <link rel="import" href="templates/templates.html"> -->
+    <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="css/materialize.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="css/custom.css" rel="stylesheet" />
+    <script src="js/jquery.js" type="text/javascript">
+    </script>
+    <script src="js/materialize.min.js" type="text/javascript">
+    </script>
+    <script src="js/underscore-min.js" type="text/javascript">
+    </script>
+    <script src="js/backbone.js" type="text/javascript">
+    </script>
+    <script src="js/app.js" type="text/javascript">
+    </script>
+    <!-- Let's get started -->
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div id="app-header-container">
+        </div>
+        <div id="app-body-container">
+        </div>
+        <div id="app-footer-container" class="hide">
+            <div class="row no-margin">
+                <div class="col-xs-12 no-padding text-right small">
+                    <b>
+              solution by Ashish Sajwan | sajwan.ashu@gmail.com | +91-8802872247
+            </b>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/template" id="Tpl-header">
+    <div class="row">
+        <div class="col m6" id="logo-container">
+            <img class="responsive-img" src="images/githubIcon.png" width="50px" />
+            <span class="big"> TopGit </span>
+            <span class="small"> - finding the best github projects!</span>
+        </div>
+        <div class="col m6">
+            <div id="result-gist-container">
+                we've found <b>569</b> repositories in <b>c++</b>
+            </div>
+        </div>
+    </div>
+</script>
+
+</html>
