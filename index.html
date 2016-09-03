@@ -44,12 +44,12 @@
 </body>
 <script type="text/template" id="Tpl-header">
     <div class="row">
-        <div class="col m6" id="logo-container">
+        <div class="col m6 s12" id="logo-container">
             <img class="responsive-img" src="images/githubIcon.png" width="50px" />
             <span class="big"> TopGit </span>
             <span class="small"> - finding the best github projects!</span>
         </div>
-        <div class="col m6">
+        <div class="col m6 s12">
             <div id="result-gist-container">
                 we've found <b><%=totalRepos%></b> repositories in <b><%=language%></b>
             </div>
@@ -79,7 +79,7 @@
                     <i class="material-icons">call_merge</i>
                 </div>
                 <div class="col s11">
-                    <span class="black-text"><%=full_name%></span>
+                    <div class="repoName"><%=full_name%></div>
                 </div>
             </div>
         </div>
