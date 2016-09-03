@@ -67,6 +67,9 @@ var HeaderView = Backbone.View.extend({
 });
 
 var BodyView = Backbone.View.extend({
+    events: {
+        'change input.autocomplete': 'updateSearchData'
+    },
     initialize: function(data) {
         this.renderBody();
         /**
@@ -80,7 +83,15 @@ var BodyView = Backbone.View.extend({
           will be triggered & then we can render the Repos as list inside this view
         */
         this.listenTo(this.collection, 'sync', this.renderReposList);
-
+        this.listenTo(this.queryData, 'change', this.fetchRepos);
+        this.fetchRepos();
+    },
+    updateSearchData: function(e) {
+        this.queryData.set({
+            language: $(e.currentTarget).val()
+        });
+    },
+    fetchRepos: function() {
         this.collection.fetch({
             data: {
                 q: 'stars:' + this.queryData.get('stars').min + '..' + this.queryData.get('stars').max + ' language:' + this.queryData.get('language'),
@@ -88,18 +99,18 @@ var BodyView = Backbone.View.extend({
                 order: 'desc'
             }
         });
-
     },
     renderBody: function() {
         this.$el.html(_.template($('#Tpl-body').html()));
         $('#app-body-container').html(this.el);
+        this.activateAutocomplete();
+    },
+    activateAutocomplete: function() {
         $.getJSON('https://rawgit.com/ashishsajwan/topgit-sap/gh-pages/data/languages.json', function(json) {
-          console.log('hi',json);
             $('input.autocomplete').autocomplete({
                 data: json
             });
         });
-
     },
     renderReposList: function() {
         this.setHeaderStats();
