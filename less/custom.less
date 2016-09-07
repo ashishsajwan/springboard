@@ -42,11 +42,62 @@
 
 #app-body-container {
     padding: 10px;
+
+    #add-user-button {
+        &.loading {
+            .spinner {
+                display: inline-block;
+            }
+
+            .normal {
+                display: none;
+            }
+        }
+
+        .spinner {
+            display: none;
+        }
+    }
+
+    #sort-container {
+        padding: 0 20px;
+
+        .sort {
+            display: inline-block;
+            width: 100px;
+            text-align: center;
+            cursor: pointer;
+
+            &::after {
+                font-family: FontAwesome;
+                content: "\f0dd";
+                margin: 0 3px;
+                vertical-align: text-bottom;
+                display: none;
+            }
+
+            &.asc {
+                color: #2bbbad;
+
+                &::after {
+                    display: inline-block;
+                }
+            }
+
+            &.desc {
+                color: #2bbbad;
+
+                &::after {
+                    display: inline-block;
+                    transform: rotate(180deg);
+                    vertical-align: sub;
+                }
+            }
+        }
+    }
 }
 
 #user-list-container {
-    margin-top: -20px;
-
     #user-list {
         display: inline-flex;
         flex-wrap: wrap;

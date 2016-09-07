@@ -41,8 +41,44 @@
 #app-body-container {
   padding: 10px;
 }
-#user-list-container {
-  margin-top: -20px;
+#app-body-container #add-user-button.loading .spinner {
+  display: inline-block;
+}
+#app-body-container #add-user-button.loading .normal {
+  display: none;
+}
+#app-body-container #add-user-button .spinner {
+  display: none;
+}
+#app-body-container #sort-container {
+  padding: 0 20px;
+}
+#app-body-container #sort-container .sort {
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  cursor: pointer;
+}
+#app-body-container #sort-container .sort::after {
+  font-family: FontAwesome;
+  content: "\f0dd";
+  margin: 0 3px;
+  vertical-align: text-bottom;
+  display: none;
+}
+#app-body-container #sort-container .sort.asc {
+  color: #2bbbad;
+}
+#app-body-container #sort-container .sort.asc::after {
+  display: inline-block;
+}
+#app-body-container #sort-container .sort.desc {
+  color: #2bbbad;
+}
+#app-body-container #sort-container .sort.desc::after {
+  display: inline-block;
+  transform: rotate(180deg);
+  vertical-align: sub;
 }
 #user-list-container #user-list {
   display: inline-flex;

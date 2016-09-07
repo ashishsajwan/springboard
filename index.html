@@ -59,8 +59,19 @@
                 </div>
                 <div class="col s4 center-align">
                     <a class="waves-effect waves-light btn" id="add-user-button">
-                        Add
+                        <span class="spinner">
+                          <i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Adding
+                        </span>
+                        <span class="normal"> Add </span>
                     </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 valign-wrapper" id="sort-container">
+                    Sort By :
+                    <div class="sort" id="name">Name</div>
+                    <div class="sort" id="location">Location</div>
+                    <div class="sort" id="followers">Follower</div>
                 </div>
             </div>
             <div class="row" id="user-list-container">
@@ -88,17 +99,17 @@
     <div class="card" data-userid=<%=id%> >
         <div class="removeUser"><i class="fa fa-times" aria-hidden="true"></i></div>
         <div class="card-image">
-            <img src="<%=data.avatar_url%>">
-            <span class="card-title"><%=data.name%></span>
+            <img src="<%=avatar_url%>">
+            <span class="card-title"><%=name%></span>
         </div>
         <div class="card-content">
             <div>
                 <ul>
                     <li>Location :
-                        <%=data.location%>
+                        <%=location%>
                     </li>
                     <li> Followers :
-                        <%=data.followers%>
+                        <%=followers%>
                     </li>
             </div>
         </div>

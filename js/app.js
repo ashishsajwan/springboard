@@ -21,9 +21,13 @@ var UserModel = Backbone.Model.extend({
  * the list of Repos as collection
  */
 var UserList = Backbone.Collection.extend({
-    model: UserModel,
     localStorage: new Backbone.LocalStorage('UserList'),
-    initialize: function() {}
+    initialize: function() {},
+    comparator: function(a, b) {
+        a = a.get(this.sort_key);
+        b = b.get(this.sort_key);
+        return a < b ? 1 : a > b ? -1 : 0;
+    }
 });
 
 /**
@@ -44,11 +48,13 @@ var HeaderView = Backbone.View.extend({
 var BodyView = Backbone.View.extend({
     events: {
         'click #add-user-button': 'findAndAddUser',
-        'click #user-list .removeUser .fa.fa-times': 'removeUser'
+        'click #user-list .removeUser .fa.fa-times': 'removeUser',
+        'click #sort-container .sort': 'sortCards'
     },
     initialize: function(data) {
         _.extend(this, data);
         this.listenTo(this.userList, 'sync', this.renderList);
+        this.listenTo(this.userList, 'sort', this.renderList);
         this.render();
         this.userList.fetch();
     },
@@ -61,10 +67,7 @@ var BodyView = Backbone.View.extend({
         var userTpl = _.template($('#Tpl-user').html());
         $('#user-list-container #loader').hide();
         _.each((this.userList.models).reverse(), function(model, key) {
-            $('#user-list-container #user-list').append(userTpl({
-                data: model.toJSON(),
-                id: model.id
-            }));
+            $('#user-list-container #user-list').append(userTpl(model.toJSON()));
         });
     },
     removeUser: function(e) {
@@ -72,6 +75,7 @@ var BodyView = Backbone.View.extend({
         this.userList.get(userId).destroy();
     },
     findAndAddUser: function(e) {
+        $(e.currentTarget).addClass('loading');
         var that = this;
         this.userModel.userName = $('#autocomplete-input').val();
         this.userModel.fetch({
@@ -82,7 +86,18 @@ var BodyView = Backbone.View.extend({
                 that.userList.add(model);
                 that.userModel.save();
             },
+            complete: function() {
+                $(e.currentTarget).removeClass('loading')
+                $('#autocomplete-input').val('');
+            }
         });
+    },
+    sortCards: function(e) {
+        this.userList.sort_order = $(e.currentTarget).hasClass('asc') ? 'desc' : 'asc';
+        this.userList.sort_key = $(e.currentTarget).attr('id');
+        this.userList.sort();
+        $('#sort-container .sort').removeClass('asc desc');
+        $(e.currentTarget).addClass(this.userList.sort_order);
     }
 });
 $(document).ready(function() {
