@@ -55,9 +55,10 @@ var BodyView = Backbone.View.extend({
         $('#app-body-container').html(this.el);
     },
     renderList: function() {
+        $('#user-list-container #user-list').empty();
         var userTpl = _.template($('#Tpl-user').html());
         $('#user-list-container #loader').hide();
-        _.each(this.userList.models, function(model, key) {
+        _.each((this.userList.models).reverse(), function(model, key) {
             $('#user-list-container #user-list').append(userTpl(model.toJSON()));
         });
     },
@@ -65,8 +66,10 @@ var BodyView = Backbone.View.extend({
         var that = this;
         this.userModel.userName = $('#autocomplete-input').val();
         this.userModel.fetch({
+            error: function() {
+
+            },
             success: function(model, response, options) {
-                console.log(model, response, that.userModel.userName);
                 that.userList.add(model);
                 that.userModel.save();
             },

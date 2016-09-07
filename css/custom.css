@@ -51,8 +51,24 @@
 #user-list-container #user-list .card {
   margin: 10px;
 }
+#user-list-container #user-list .card .removeUser {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(200, 200, 200, 0.6);
+  width: 100%;
+  height: 100%;
+  text-align: right;
+  padding: 10px;
+  cursor: pointer;
+}
 #user-list-container #user-list .card .card-content {
   width: 100%;
+}
+#user-list-container #user-list .card:hover .removeUser {
+  display: inline-block;
 }
 @media only screen and (max-width: 600px) {
   #app-body-container .leftContent {
