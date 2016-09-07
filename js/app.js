@@ -6,6 +6,7 @@
  * This is a backbone model which store
  * the data for a Repo Entity
  */
+
 var UserModel = Backbone.Model.extend({
     urlRoot: 'https://api.github.com/users/',
     userName: null,
@@ -42,7 +43,8 @@ var HeaderView = Backbone.View.extend({
 
 var BodyView = Backbone.View.extend({
     events: {
-        'click #add-user-button': 'findAndAddUser'
+        'click #add-user-button': 'findAndAddUser',
+        'click #user-list .removeUser .fa.fa-times': 'removeUser'
     },
     initialize: function(data) {
         _.extend(this, data);
@@ -59,8 +61,15 @@ var BodyView = Backbone.View.extend({
         var userTpl = _.template($('#Tpl-user').html());
         $('#user-list-container #loader').hide();
         _.each((this.userList.models).reverse(), function(model, key) {
-            $('#user-list-container #user-list').append(userTpl(model.toJSON()));
+            $('#user-list-container #user-list').append(userTpl({
+                data: model.toJSON(),
+                id: model.id
+            }));
         });
+    },
+    removeUser: function(e) {
+        var userId = parseFloat($(e.currentTarget).parents('.card').attr('data-userid'));
+        this.userList.get(userId).destroy();
     },
     findAndAddUser: function(e) {
         var that = this;

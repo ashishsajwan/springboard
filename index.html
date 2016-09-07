@@ -85,20 +85,20 @@
     </div>
 </script>
 <script type="text/template" id="Tpl-user">
-    <div class="card">
+    <div class="card" data-userid=<%=id%> >
         <div class="removeUser"><i class="fa fa-times" aria-hidden="true"></i></div>
         <div class="card-image">
-            <img src="<%=avatar_url%>">
-            <span class="card-title"><%=name%></span>
+            <img src="<%=data.avatar_url%>">
+            <span class="card-title"><%=data.name%></span>
         </div>
         <div class="card-content">
             <div>
                 <ul>
                     <li>Location :
-                        <%=location%>
+                        <%=data.location%>
                     </li>
                     <li> Followers :
-                        <%=followers%>
+                        <%=data.followers%>
                     </li>
             </div>
         </div>
