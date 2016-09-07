@@ -41,69 +41,23 @@
 }
 
 #app-body-container {
-    min-height: 100%;
-
-    .leftContent {
-        border-right: 2px solid #E6E6E6;
-        padding-top: 10px;
-    }
-
-    .rightContent {
-        padding-top: 10px;
-
-        #slide-out {
-            padding: 10px;
-        }
-
-        .row.center-align {
-            padding: 5px;
-            background: #e6e6e6;
-            border-radius: 5px;
-
-            > div:first-child {
-                border: 1px solid #e6e6e6;
-                border-radius: 5px;
-                padding: 5px;
-                background: white;
-                margin-bottom: 5px;
-            }
-        }
-
-        .startRange {
-            padding-bottom: 20px !important;
-        }
-    }
-
-    .autocomplete-content {
-        position: absolute;
-    }
+    padding: 10px;
 }
 
-#repo-list-container {
+#user-list-container {
     margin-top: -20px;
 
-    #repo-list {
-        overflow: auto;
-    }
+    #user-list {
+        display: inline-flex;
+        flex-wrap: wrap;
 
-    .card-panel {
-        cursor: pointer;
-    }
+        .card {
+            margin: 10px;
 
-    .repoName {
-        color: #6FB4B1;
-        font-size: 1.5em;
-        margin-left: 5px;
-    }
-
-    .fa-github {
-        font-size: 2em;
-    }
-
-    .repoDetail {
-        color: #666666;
-        font-size: 1em;
-        margin-left: 5px;
+            .card-content {
+                width: 100%;
+            }
+        }
     }
 }
 @import "mediaQuery.less";

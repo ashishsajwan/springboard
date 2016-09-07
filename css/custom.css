@@ -39,57 +39,20 @@
   padding: 5px 10px;
 }
 #app-body-container {
-  min-height: 100%;
-}
-#app-body-container .leftContent {
-  border-right: 2px solid #E6E6E6;
-  padding-top: 10px;
-}
-#app-body-container .rightContent {
-  padding-top: 10px;
-}
-#app-body-container .rightContent #slide-out {
   padding: 10px;
 }
-#app-body-container .rightContent .row.center-align {
-  padding: 5px;
-  background: #e6e6e6;
-  border-radius: 5px;
-}
-#app-body-container .rightContent .row.center-align > div:first-child {
-  border: 1px solid #e6e6e6;
-  border-radius: 5px;
-  padding: 5px;
-  background: white;
-  margin-bottom: 5px;
-}
-#app-body-container .rightContent .startRange {
-  padding-bottom: 20px !important;
-}
-#app-body-container .autocomplete-content {
-  position: absolute;
-}
-#repo-list-container {
+#user-list-container {
   margin-top: -20px;
 }
-#repo-list-container #repo-list {
-  overflow: auto;
+#user-list-container #user-list {
+  display: inline-flex;
+  flex-wrap: wrap;
 }
-#repo-list-container .card-panel {
-  cursor: pointer;
+#user-list-container #user-list .card {
+  margin: 10px;
 }
-#repo-list-container .repoName {
-  color: #6FB4B1;
-  font-size: 1.5em;
-  margin-left: 5px;
-}
-#repo-list-container .fa-github {
-  font-size: 2em;
-}
-#repo-list-container .repoDetail {
-  color: #666666;
-  font-size: 1em;
-  margin-left: 5px;
+#user-list-container #user-list .card .card-content {
+  width: 100%;
 }
 @media only screen and (max-width: 600px) {
   #app-body-container .leftContent {
