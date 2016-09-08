@@ -55,6 +55,7 @@ var BodyView = Backbone.View.extend({
         'enter #autocomplete-input': 'findAndAddUser',
         'click #add-user-button': 'findAndAddUser',
         'click #user-list .removeUser .fa.fa-times': 'removeUser',
+        'click #user-list .card': 'goToProfile',
         'click #sort-container .sort': 'sortCards'
     },
     initialize: function(data) {
@@ -116,6 +117,9 @@ var BodyView = Backbone.View.extend({
                 input.attr('disabled', false);
             }
         });
+    },
+    goToProfile: function(e) {
+        window.open($(e.currentTarget).attr('data-url'));
     },
     // this function just sets the parameter for sorting
     // rest is taken care of by backbone collection sort

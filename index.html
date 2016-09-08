@@ -92,23 +92,23 @@
     </div>
 </script>
 <script type="text/template" id="Tpl-user">
-    <div class="card" data-userid=<%=id%> >
-        <div class="removeUser"><i class="fa fa-times" aria-hidden="true"></i></div>
-        <div class="card-image">
-            <img src="<%=avatar_url%>">
-            <span class="card-title"><%=name%></span>
-        </div>
-        <div class="card-content">
-            <div>
-                <ul>
-                    <li>Location :
-                        <%=location%>
-                    </li>
-                    <li> Followers :
-                        <%=followers%>
-                    </li>
+    <div class="card" data-userid=<%=id%> data-url="<%=html_url%>">
+            <div class="removeUser"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <div class="card-image">
+                <img src="<%=avatar_url%>">
+                <span class="card-title"><%=name%></span>
             </div>
-        </div>
+            <div class="card-content">
+                <div>
+                    <ul>
+                        <li>Location :
+                            <%=location%>
+                        </li>
+                        <li> Followers :
+                            <%=followers%>
+                        </li>
+                </div>
+            </div>
     </div>
 </script>
 
