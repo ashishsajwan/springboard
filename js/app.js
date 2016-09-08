@@ -13,7 +13,9 @@ var UserModel = Backbone.Model.extend({
     url: function() {
         return this.urlRoot + this.userName;
     },
-    initialize: function() {}
+    initialize: function(data) {
+        this.userName = data.userName;
+    }
 });
 
 /**
@@ -56,11 +58,10 @@ var BodyView = Backbone.View.extend({
         'click #sort-container .sort': 'sortCards'
     },
     initialize: function(data) {
-        _.extend(this, data);
-        this.listenTo(this.userList, 'sync', this.renderList);
+        this.listenTo(this.collection, 'sync', this.renderList);
         this.render();
-        this.userList.fetch();
-        this.listenTo(this.userList, 'sort', this.renderList);
+        this.collection.fetch();
+        this.listenTo(this.collection, 'sort', this.renderList);
     },
     render: function() {
         this.$el.html(_.template($('#Tpl-body').html()));
@@ -70,25 +71,27 @@ var BodyView = Backbone.View.extend({
         $('#user-list-container #user-list').empty();
         var userTpl = _.template($('#Tpl-user').html());
         $('#user-list-container #loader').hide();
-        _.each(_.clone(this.userList.models).reverse(), function(model, key) {
+        _.each(_.clone(this.collection.models).reverse(), function(model, key) {
             $('#user-list-container #user-list').append(userTpl(model.toJSON()));
         });
     },
     removeUser: function(e) {
         var userId = parseFloat($(e.currentTarget).parents('.card').attr('data-userid'));
-        this.userList.get(userId).destroy();
+        this.collection.get(userId).destroy();
     },
     findAndAddUser: function(e) {
         $(e.currentTarget).addClass('loading');
         var that = this;
-        this.userModel.userName = $('#autocomplete-input').val();
-        this.userModel.fetch({
+        var userModel = new UserModel({
+            userName: $('#autocomplete-input').val()
+        });
+        userModel.fetch({
             error: function() {
                 Materialize.toast('Oops! Couldn\'t find that user', 4000)
             },
             success: function(model, response, options) {
-                that.userList.add(model);
-                that.userModel.save();
+                that.collection.add(model);
+                userModel.save();
             },
             complete: function() {
                 $(e.currentTarget).removeClass('loading')
@@ -97,11 +100,11 @@ var BodyView = Backbone.View.extend({
         });
     },
     sortCards: function(e) {
-        this.userList.sort_order = $(e.currentTarget).hasClass('asc') ? 'desc' : 'asc';
-        this.userList.sort_key = $(e.currentTarget).attr('id');
-        this.userList.sort();
+        this.collection.sort_order = $(e.currentTarget).hasClass('asc') ? 'desc' : 'asc';
+        this.collection.sort_key = $(e.currentTarget).attr('id');
+        this.collection.sort();
         $('#sort-container .sort').removeClass('asc desc');
-        $(e.currentTarget).addClass(this.userList.sort_order);
+        $(e.currentTarget).addClass(this.collection.sort_order);
     }
 });
 $(document).ready(function() {
@@ -110,7 +113,6 @@ $(document).ready(function() {
     // which will render header view of app
     var headerView = new HeaderView();
     var bodyView = new BodyView({
-        userModel: new UserModel(),
-        userList: new UserList()
+        collection: new UserList()
     });
 });
