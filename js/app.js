@@ -84,7 +84,7 @@ var BodyView = Backbone.View.extend({
         this.userModel.userName = $('#autocomplete-input').val();
         this.userModel.fetch({
             error: function() {
-
+                Materialize.toast('Oops! Couldn\'t find that user', 4000)
             },
             success: function(model, response, options) {
                 that.userList.add(model);
