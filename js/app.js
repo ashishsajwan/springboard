@@ -1,12 +1,7 @@
 /**
  * This is a backbone model which store
- * the data for a Query/API Entity
+ * the data for a user Entity
  */
-/**
- * This is a backbone model which store
- * the data for a Repo Entity
- */
-
 var UserModel = Backbone.Model.extend({
     urlRoot: 'https://api.github.com/users/',
     userName: null,
@@ -20,7 +15,7 @@ var UserModel = Backbone.Model.extend({
 
 /**
  * This is a backbone collection which store
- * the list of Repos as collection
+ * the list of users as collection
  */
 var UserList = Backbone.Collection.extend({
     localStorage: new Backbone.LocalStorage('UserList'),
@@ -51,22 +46,37 @@ var HeaderView = Backbone.View.extend({
 });
 
 
+/**
+ * This is a backbone view which is responsible
+ * for rendering body part of the app
+ */
 var BodyView = Backbone.View.extend({
     events: {
+        'enter #autocomplete-input': 'findAndAddUser',
         'click #add-user-button': 'findAndAddUser',
         'click #user-list .removeUser .fa.fa-times': 'removeUser',
         'click #sort-container .sort': 'sortCards'
     },
     initialize: function(data) {
+        // listen to sync event on collection and renderlist
         this.listenTo(this.collection, 'sync', this.renderList);
+
+        // lets render the body part of the app
         this.render();
+
+        // lets fetch collection now
         this.collection.fetch();
+
+        // also listen to sort event on collection and renderList
         this.listenTo(this.collection, 'sort', this.renderList);
     },
+    // here we just render the search input box and sorting elements
+    // and also the container for list
     render: function() {
         this.$el.html(_.template($('#Tpl-body').html()));
         $('#app-body-container').html(this.el);
     },
+    // go through the collection and render each user card in to the container
     renderList: function() {
         $('#user-list-container #user-list').empty();
         var userTpl = _.template($('#Tpl-user').html());
@@ -75,15 +85,22 @@ var BodyView = Backbone.View.extend({
             $('#user-list-container #user-list').append(userTpl(model.toJSON()));
         });
     },
+    // when clicked on remove user lets remove user from list
     removeUser: function(e) {
         var userId = parseFloat($(e.currentTarget).parents('.card').attr('data-userid'));
         this.collection.get(userId).destroy();
+        this.collection.trigger('sync');
     },
-    findAndAddUser: function(e) {
-        $(e.currentTarget).addClass('loading');
+    // get the user details from github.. make a model out of the data
+    // add model to collection, save it to LocalStorage and render the list
+    findAndAddUser: function() {
+        var input = $('#autocomplete-input');
+        var button = $('#add-user-button');
+        button.addClass('loading');
+        input.attr('disabled', true);
         var that = this;
         var userModel = new UserModel({
-            userName: $('#autocomplete-input').val()
+            userName: input.val()
         });
         userModel.fetch({
             error: function() {
@@ -94,11 +111,15 @@ var BodyView = Backbone.View.extend({
                 userModel.save();
             },
             complete: function() {
-                $(e.currentTarget).removeClass('loading')
-                $('#autocomplete-input').val('');
+                button.removeClass('loading')
+                input.val('');
+                input.attr('disabled', false);
             }
         });
     },
+    // this function just sets the parameter for sorting
+    // rest is taken care of by backbone collection sort
+    // sort collection and render list again
     sortCards: function(e) {
         this.collection.sort_order = $(e.currentTarget).hasClass('asc') ? 'desc' : 'asc';
         this.collection.sort_key = $(e.currentTarget).attr('id');
@@ -108,7 +129,13 @@ var BodyView = Backbone.View.extend({
     }
 });
 $(document).ready(function() {
-
+    // capturing enter key on inputs and firing enter event
+    // so that pressing enter of searchbox works
+    $('#app-body-container').on('keyup', '#autocomplete-input', function(e) {
+        if (e.keyCode == 13) {
+            $(this).trigger('enter');
+        }
+    });
     // create a object of Headerview
     // which will render header view of app
     var headerView = new HeaderView();
