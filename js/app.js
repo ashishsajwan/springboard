@@ -26,7 +26,11 @@ var UserList = Backbone.Collection.extend({
     comparator: function(a, b) {
         a = a.get(this.sort_key);
         b = b.get(this.sort_key);
-        return a < b ? 1 : a > b ? -1 : 0;
+        if (this.sort_order == 'asc') {
+            return a > b ? 1 : a < b ? -1 : 0;
+        } else {
+            return a < b ? 1 : a > b ? -1 : 0;
+        }
     }
 });
 
@@ -54,9 +58,9 @@ var BodyView = Backbone.View.extend({
     initialize: function(data) {
         _.extend(this, data);
         this.listenTo(this.userList, 'sync', this.renderList);
-        this.listenTo(this.userList, 'sort', this.renderList);
         this.render();
         this.userList.fetch();
+        this.listenTo(this.userList, 'sort', this.renderList);
     },
     render: function() {
         this.$el.html(_.template($('#Tpl-body').html()));
@@ -66,7 +70,7 @@ var BodyView = Backbone.View.extend({
         $('#user-list-container #user-list').empty();
         var userTpl = _.template($('#Tpl-user').html());
         $('#user-list-container #loader').hide();
-        _.each((this.userList.models).reverse(), function(model, key) {
+        _.each(_.clone(this.userList.models).reverse(), function(model, key) {
             $('#user-list-container #user-list').append(userTpl(model.toJSON()));
         });
     },
